@@ -16,3 +16,8 @@ body {
   padding: 0;
   height: 100%;
 }
+
+/* TABLE OF STORIES */
+.stories {
+  margin-top: -70px;
+}
