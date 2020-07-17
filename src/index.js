@@ -14,13 +14,19 @@ function handleRequest() {
 }
 
 function handleResponse({ hits }) {
-  const stories = hits.map((hit) => ({
-    url: hit.url,
-    author: hit.author,
-    title: hit.title,
-    num_comments: hit.num_comments,
-    points: hit.points,
-  }));
+  const stories = hits.map((hit) => {
+    if (hit.url === null || hit.url === "") {
+      hit.url = `https://news.ycombinator.com/item?id=${hit.objectID}`;
+    }
+
+    return {
+      url: hit.url,
+      author: hit.author,
+      title: hit.title,
+      num_comments: hit.num_comments,
+      points: hit.points,
+    };
+  });
 
   renderStories(stories);
 }
