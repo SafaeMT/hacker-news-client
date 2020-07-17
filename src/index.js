@@ -2,10 +2,15 @@ const API_URL = "https://hn.algolia.com/api/v1/search";
 const searchInput = document.querySelector(".input");
 const thead = document.querySelector("thead");
 const tbody = document.querySelector("tbody");
+const table = document.querySelector(".table");
+const loader = document.querySelector(".loader");
 
 document.querySelector(".button").addEventListener("click", handleRequest);
 
 function handleRequest() {
+  table.classList.add("is-hidden");
+  loader.classList.remove("is-hidden");
+
   const query = searchInput.value;
 
   fetch(`${API_URL}?query=${query}&tags=story`)
@@ -51,4 +56,7 @@ function renderStories(stories) {
   });
 
   tbody.innerHTML = result;
+
+  loader.classList.add("is-hidden");
+  table.classList.remove("is-hidden");
 }
