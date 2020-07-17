@@ -1,0 +1,23 @@
+/* GLOBAL */
+html {
+  box-sizing: border-box;
+  height: 100%;
+  background-color: #f2f0f4;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* TABLE OF STORIES */
+.stories {
+  margin-top: -70px;
+}
