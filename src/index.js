@@ -4,18 +4,40 @@ const thead = document.querySelector("thead");
 const tbody = document.querySelector("tbody");
 const table = document.querySelector(".table");
 const loader = document.querySelector(".loader");
+const more = document.querySelector(".more");
+
+let currentState;
 
 document.querySelector(".button").addEventListener("click", handleRequest);
+document.querySelector(".more").addEventListener("click", handleMoreRequest);
 
 function handleRequest() {
   table.classList.add("is-hidden");
+  more.classList.add("is-hidden");
   loader.classList.remove("is-hidden");
 
   const query = searchInput.value;
 
   fetch(`${API_URL}?query=${query}&tags=story`)
     .then((response) => response.json())
-    .then((jsonResponse) => handleResponse(jsonResponse));
+    .then((jsonResponse) => {
+      currentState = jsonResponse;
+      handleResponse(jsonResponse);
+    });
+}
+
+function handleMoreRequest() {
+  loader.classList.remove("is-hidden");
+  currentState.page++;
+
+  fetch(
+    `${API_URL}?query=${currentState.query}&tags=story&page=${currentState.page}`
+  )
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      currentState = jsonResponse;
+      handleResponse(jsonResponse);
+    });
 }
 
 function handleResponse({ hits }) {
@@ -37,12 +59,14 @@ function handleResponse({ hits }) {
 }
 
 function renderStories(stories) {
-  thead.innerHTML = `<tr class="has-background-primary">
-    <th class="has-text-white">TITLE</th>
-    <th class="has-text-white">AUTHOR</th>
-    <th class="has-text-white">COMMENTS</th>
-    <th class="has-text-white">POINTS</th>
-  </tr>`;
+  if (currentState.page == 0) {
+    thead.innerHTML = `<tr class="has-background-primary">
+      <th class="has-text-white">TITLE</th>
+      <th class="has-text-white">AUTHOR</th>
+      <th class="has-text-white">COMMENTS</th>
+      <th class="has-text-white">POINTS</th>
+    </tr>`;
+  }
 
   let result = "";
 
@@ -55,8 +79,14 @@ function renderStories(stories) {
     </tr>`;
   });
 
-  tbody.innerHTML = result;
+  if (currentState.page == 0) {
+    tbody.innerHTML = result;
+
+    table.classList.remove("is-hidden");
+    more.classList.remove("is-hidden");
+  } else {
+    tbody.innerHTML += result;
+  }
 
   loader.classList.add("is-hidden");
-  table.classList.remove("is-hidden");
 }
