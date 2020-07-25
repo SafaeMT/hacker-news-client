@@ -5,6 +5,8 @@ const tbody = document.querySelector("tbody");
 const table = document.querySelector(".table");
 const loader = document.querySelector(".loader");
 
+let currentState;
+
 document.querySelector(".button").addEventListener("click", handleRequest);
 
 function handleRequest() {
@@ -15,7 +17,10 @@ function handleRequest() {
 
   fetch(`${API_URL}?query=${query}&tags=story`)
     .then((response) => response.json())
-    .then((jsonResponse) => handleResponse(jsonResponse));
+    .then((jsonResponse) => {
+      currentState = jsonResponse;
+      handleResponse(jsonResponse);
+    });
 }
 
 function handleResponse({ hits }) {
