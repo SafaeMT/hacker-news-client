@@ -6,7 +6,11 @@ const table = document.querySelector(".table");
 const loader = document.querySelector(".loader");
 const more = document.querySelector(".more");
 
-let currentState;
+let state = {
+  query: "",
+  stories: [],
+  page: 0,
+};
 
 document.querySelector(".button").addEventListener("click", handleRequest);
 document.querySelector(".more").addEventListener("click", handleMoreRequest);
@@ -16,50 +20,48 @@ function handleRequest() {
   more.classList.add("is-hidden");
   loader.classList.remove("is-hidden");
 
-  const query = searchInput.value;
+  state = {
+    query: searchInput.value,
+    stories: [],
+    page: 0,
+  };
 
-  fetch(`${API_URL}?query=${query}&tags=story`)
+  fetch(`${API_URL}?query=${state.query}&tags=story`)
     .then((response) => response.json())
-    .then((jsonResponse) => {
-      currentState = jsonResponse;
-      handleResponse(jsonResponse);
-    });
+    .then(handleResponse);
 }
 
 function handleMoreRequest() {
   loader.classList.remove("is-hidden");
-  currentState.page++;
 
-  fetch(
-    `${API_URL}?query=${currentState.query}&tags=story&page=${currentState.page}`
-  )
+  fetch(`${API_URL}?query=${state.query}&tags=story&page=${state.page + 1}`)
     .then((response) => response.json())
-    .then((jsonResponse) => {
-      currentState = jsonResponse;
-      handleResponse(jsonResponse);
-    });
+    .then(handleResponse);
 }
 
-function handleResponse({ hits }) {
-  const stories = hits.map((hit) => {
-    if (hit.url === null || hit.url === "") {
-      hit.url = `https://news.ycombinator.com/item?id=${hit.objectID}`;
+function handleResponse({ hits, page }) {
+  const newStories = hits.map((story) => {
+    if (story.url === null || story.url === "") {
+      story.url = `https://news.ycombinator.com/item?id=${story.objectID}`;
     }
 
     return {
-      url: hit.url,
-      author: hit.author,
-      title: hit.title,
-      num_comments: hit.num_comments,
-      points: hit.points,
+      url: story.url,
+      author: story.author,
+      title: story.title,
+      num_comments: story.num_comments,
+      points: story.points,
     };
   });
 
-  renderStories(stories);
+  state.page = page;
+  state.stories = [...state.stories, ...newStories];
+
+  renderStories();
 }
 
-function renderStories(stories) {
-  if (currentState.page == 0) {
+function renderStories() {
+  if (state.page == 0) {
     thead.innerHTML = `<tr class="has-background-primary">
       <th class="has-text-white">TITLE</th>
       <th class="has-text-white">AUTHOR</th>
@@ -70,7 +72,7 @@ function renderStories(stories) {
 
   let result = "";
 
-  stories.forEach((story) => {
+  state.stories.forEach((story) => {
     result += `<tr>
       <td class="has-text-left"><a href="${story.url}">${story.title}</a></td>
       <td>${story.author}</td>
@@ -79,13 +81,11 @@ function renderStories(stories) {
     </tr>`;
   });
 
-  if (currentState.page == 0) {
-    tbody.innerHTML = result;
+  tbody.innerHTML = result;
 
+  if (state.page == 0) {
     table.classList.remove("is-hidden");
     more.classList.remove("is-hidden");
-  } else {
-    tbody.innerHTML += result;
   }
 
   loader.classList.add("is-hidden");
