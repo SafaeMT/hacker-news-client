@@ -30,6 +30,14 @@ body {
   background-color: hsl(171, 100%, 41%);
 }
 
+.button.is-primary.commentsColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
+.button.is-primary.pointsColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
 /* LOADER */
 .loader {
   width: 50px;

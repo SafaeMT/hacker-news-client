@@ -33,6 +33,22 @@ thead.addEventListener("click", (e) => {
         return 1;
       }
     });
+  } else if (e.target.classList.contains("commentsColumn")) {
+    state.stories.sort((hitA, hitB) => {
+      if (hitA.num_comments >= hitB.num_comments) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+  } else if (e.target.classList.contains("pointsColumn")) {
+    state.stories.sort((hitA, hitB) => {
+      if (hitA.points >= hitB.points) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
   }
 
   renderStories();
@@ -88,8 +104,8 @@ function renderStories() {
     thead.innerHTML = `<tr class="has-background-primary">
       <th class="has-text-white py-0"><a class="button is-primary titleColumn">TITLE</a></th>
       <th class="has-text-white py-0"><a class="button is-primary authorColumn">AUTHOR</a></th>
-      <th class="has-text-white">COMMENTS</th>
-      <th class="has-text-white">POINTS</th>
+      <th class="has-text-white py-0"><a class="button is-primary commentsColumn">COMMENTS</a></th>
+      <th class="has-text-white py-0"><a class="button is-primary pointsColumn">POINTS</a></th>
     </tr>`;
   }
 
