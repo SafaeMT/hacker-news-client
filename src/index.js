@@ -23,9 +23,19 @@ thead.addEventListener("click", (e) => {
         return 1;
       }
     });
-
-    renderStories();
+  } else if (e.target.classList.contains("authorColumn")) {
+    state.stories.sort((hitA, hitB) => {
+      if (
+        hitA.author.trim().toLowerCase() <= hitB.author.trim().toLowerCase()
+      ) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
   }
+
+  renderStories();
 });
 
 function handleRequest() {
@@ -77,7 +87,7 @@ function renderStories() {
   if (state.page == 0) {
     thead.innerHTML = `<tr class="has-background-primary">
       <th class="has-text-white py-0"><a class="button is-primary titleColumn">TITLE</a></th>
-      <th class="has-text-white">AUTHOR</th>
+      <th class="has-text-white py-0"><a class="button is-primary authorColumn">AUTHOR</a></th>
       <th class="has-text-white">COMMENTS</th>
       <th class="has-text-white">POINTS</th>
     </tr>`;

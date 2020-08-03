@@ -26,6 +26,10 @@ body {
   background-color: hsl(171, 100%, 41%);
 }
 
+.button.is-primary.authorColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
 /* LOADER */
 .loader {
   width: 50px;
