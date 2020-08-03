@@ -22,6 +22,10 @@ body {
   margin-top: -70px;
 }
 
+.button.is-primary.titleColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
 /* LOADER */
 .loader {
   width: 50px;

@@ -14,6 +14,19 @@ let state = {
 
 document.querySelector(".button").addEventListener("click", handleRequest);
 document.querySelector(".more").addEventListener("click", handleMoreRequest);
+thead.addEventListener("click", (e) => {
+  if (e.target.classList.contains("titleColumn")) {
+    state.stories.sort((hitA, hitB) => {
+      if (hitA.title.trim().toLowerCase() <= hitB.title.trim().toLowerCase()) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    renderStories();
+  }
+});
 
 function handleRequest() {
   table.classList.add("is-hidden");
@@ -63,7 +76,7 @@ function handleResponse({ hits, page }) {
 function renderStories() {
   if (state.page == 0) {
     thead.innerHTML = `<tr class="has-background-primary">
-      <th class="has-text-white">TITLE</th>
+      <th class="has-text-white py-0"><a class="button is-primary titleColumn">TITLE</a></th>
       <th class="has-text-white">AUTHOR</th>
       <th class="has-text-white">COMMENTS</th>
       <th class="has-text-white">POINTS</th>
