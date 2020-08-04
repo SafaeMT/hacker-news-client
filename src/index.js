@@ -4,7 +4,8 @@ const thead = document.querySelector("thead");
 const tbody = document.querySelector("tbody");
 const table = document.querySelector(".table");
 const loader = document.querySelector(".loader");
-const more = document.querySelector(".more");
+const searchBtn = document.querySelector(".search");
+const moreBtn = document.querySelector(".more");
 
 let state = {
   query: "",
@@ -12,27 +13,32 @@ let state = {
   page: 0,
 };
 
-document.querySelector(".button").addEventListener("click", handleRequest);
-document.querySelector(".more").addEventListener("click", handleMoreRequest);
+searchBtn.addEventListener("click", handleRequest);
+moreBtn.addEventListener("click", handleMoreRequest);
 thead.addEventListener("click", sortStories);
 
 function handleRequest() {
-  table.classList.add("is-hidden");
-  more.classList.add("is-hidden");
-  loader.classList.remove("is-hidden");
+  if (!searchBtn.hasAttribute("disabled")) {
+    searchBtn.setAttribute("disabled", "");
 
-  state = {
-    query: searchInput.value,
-    stories: [],
-    page: 0,
-  };
+    table.classList.add("is-hidden");
+    moreBtn.classList.add("is-hidden");
+    loader.classList.remove("is-hidden");
 
-  fetch(`${API_URL}?query=${state.query}&tags=story`)
-    .then((response) => response.json())
-    .then(handleResponse);
+    state = {
+      query: searchInput.value,
+      stories: [],
+      page: 0,
+    };
+
+    fetch(`${API_URL}?query=${state.query}&tags=story`)
+      .then((response) => response.json())
+      .then(handleResponse);
+  }
 }
 
 function handleMoreRequest() {
+  moreBtn.classList.add("is-hidden");
   loader.classList.remove("is-hidden");
 
   fetch(`${API_URL}?query=${state.query}&tags=story&page=${state.page + 1}`)
@@ -142,8 +148,10 @@ function renderStories() {
 
   if (state.page == 0) {
     table.classList.remove("is-hidden");
-    more.classList.remove("is-hidden");
+    moreBtn.classList.remove("is-hidden");
   }
 
   loader.classList.add("is-hidden");
+  moreBtn.classList.remove("is-hidden");
+  searchBtn.removeAttribute("disabled");
 }
