@@ -38,6 +38,8 @@ function handleRequest() {
 }
 
 function handleMoreRequest() {
+  searchBtn.setAttribute("disabled", "");
+
   moreBtn.classList.add("is-hidden");
   loader.classList.remove("is-hidden");
 
