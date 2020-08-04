@@ -14,45 +14,7 @@ let state = {
 
 document.querySelector(".button").addEventListener("click", handleRequest);
 document.querySelector(".more").addEventListener("click", handleMoreRequest);
-thead.addEventListener("click", (e) => {
-  if (e.target.classList.contains("titleColumn")) {
-    state.stories.sort((hitA, hitB) => {
-      if (hitA.title.trim().toLowerCase() <= hitB.title.trim().toLowerCase()) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-  } else if (e.target.classList.contains("authorColumn")) {
-    state.stories.sort((hitA, hitB) => {
-      if (
-        hitA.author.trim().toLowerCase() <= hitB.author.trim().toLowerCase()
-      ) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-  } else if (e.target.classList.contains("commentsColumn")) {
-    state.stories.sort((hitA, hitB) => {
-      if (hitA.num_comments >= hitB.num_comments) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-  } else if (e.target.classList.contains("pointsColumn")) {
-    state.stories.sort((hitA, hitB) => {
-      if (hitA.points >= hitB.points) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-  }
-
-  renderStories();
-});
+thead.addEventListener("click", sortStories);
 
 function handleRequest() {
   table.classList.add("is-hidden");
@@ -97,6 +59,62 @@ function handleResponse({ hits, page }) {
   state.stories = [...state.stories, ...newStories];
 
   renderStories();
+}
+
+function sortStories(e) {
+  switch (e.target.textContent) {
+    case "TITLE":
+      sortAlphabetically("title");
+      break;
+
+    case "AUTHOR":
+      sortAlphabetically("author");
+      break;
+
+    case "COMMENTS":
+      sortDigitally("comments");
+      break;
+
+    case "POINTS":
+      sortDigitally("points");
+      break;
+  }
+
+  renderStories();
+}
+
+function sortAlphabetically(column) {
+  let itemA;
+  let itemB;
+
+  state.stories.sort((hitA, hitB) => {
+    if (column === "title") {
+      itemA = hitA.title;
+      itemB = hitB.title;
+    } else if (column === "author") {
+      itemA = hitA.author;
+      itemB = hitB.author;
+    }
+
+    return itemA.trim().toLowerCase() <= itemB.trim().toLowerCase() ? -1 : 1;
+  });
+}
+
+function sortDigitally(column) {
+  let itemA;
+  let itemB;
+
+  state.stories.sort((hitA, hitB) => {
+    if (column === "comments") {
+      itemA = hitA.num_comments;
+      itemB = hitB.num_comments;
+    } else if (column === "points") {
+      itemA = hitA.points;
+      itemB = hitB.points;
+    }
+
+    return itemA >= itemB ? -1 : 1;
+  });
 }
 
 function renderStories() {
