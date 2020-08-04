@@ -4,6 +4,7 @@ const thead = document.querySelector("thead");
 const tbody = document.querySelector("tbody");
 const table = document.querySelector(".table");
 const loader = document.querySelector(".loader");
+const searchBtn = document.querySelector(".search");
 const more = document.querySelector(".more");
 
 let state = {
@@ -12,24 +13,28 @@ let state = {
   page: 0,
 };
 
-document.querySelector(".button").addEventListener("click", handleRequest);
+searchBtn.addEventListener("click", handleRequest);
 document.querySelector(".more").addEventListener("click", handleMoreRequest);
 thead.addEventListener("click", sortStories);
 
 function handleRequest() {
-  table.classList.add("is-hidden");
-  more.classList.add("is-hidden");
-  loader.classList.remove("is-hidden");
+  if (!searchBtn.hasAttribute("disabled")) {
+    searchBtn.setAttribute("disabled", "");
 
-  state = {
-    query: searchInput.value,
-    stories: [],
-    page: 0,
-  };
+    table.classList.add("is-hidden");
+    more.classList.add("is-hidden");
+    loader.classList.remove("is-hidden");
 
-  fetch(`${API_URL}?query=${state.query}&tags=story`)
-    .then((response) => response.json())
-    .then(handleResponse);
+    state = {
+      query: searchInput.value,
+      stories: [],
+      page: 0,
+    };
+
+    fetch(`${API_URL}?query=${state.query}&tags=story`)
+      .then((response) => response.json())
+      .then(handleResponse);
+  }
 }
 
 function handleMoreRequest() {
@@ -146,4 +151,5 @@ function renderStories() {
   }
 
   loader.classList.add("is-hidden");
+  searchBtn.removeAttribute("disabled");
 }
