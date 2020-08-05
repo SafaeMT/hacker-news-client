@@ -1,0 +1,48 @@
+/* GLOBAL */
+html {
+  box-sizing: border-box;
+  height: 100%;
+  background-color: #f2f0f4;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* TABLE OF STORIES */
+.stories {
+  margin-top: -70px;
+}
+
+.button.is-primary.titleColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
+.button.is-primary.authorColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
+.button.is-primary.commentsColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
+.button.is-primary.pointsColumn:hover {
+  background-color: hsl(171, 100%, 41%);
+}
+
+/* LOADER */
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 3px solid hsl(171, 100%, 41%);
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
